@@ -1,6 +1,9 @@
 from flask import Flask, request, jsonify
 from job_store import JobStore
 from job_queue import JobQueue
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 job_store = None
@@ -25,10 +28,21 @@ def create_job():
     if not task:
         return jsonify({"error": "task is required"}), 400
 
-    job_id = job_store.create_job(task, payload, max_retries)
-    job_queue.enqueue(job_id)
+    client_job_id = data.get("client_job_id")
+    timeout = data.get("timeout")
+    
+    logger.info(f"Job creation requested - task: {task}, client_job_id: {client_job_id}")
+    job_id = job_store.create_job(task, payload, max_retries, client_job_id, timeout)
 
-    return jsonify({"job_id": job_id, "status": "pending"}), 201
+    job = job_store.get_job(job_id)
+    if job and job["status"] == "pending":
+        job_queue.enqueue(job_id)
+        logger.info(f"Job {job_id} created and enqueued")
+    else:
+        logger.info(f"Job {job_id} already exists - returning existing job")
+
+    actual_status = job["status"] == "pending" if job else "pending"
+    return jsonify({"job_id": job_id, "status": actual_status}), 201
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
