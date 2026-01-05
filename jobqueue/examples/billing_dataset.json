@@ -1,0 +1,86 @@
+[
+  {
+    "user_id": "user_001",
+    "billing_period": "2026-01",
+    "subscription_plan": "prime",
+    "base_price": 14.99,
+    "purchases": [
+      {"item_id": "movie_001", "price": 3.99},
+      {"item_id": "movie_002", "price": 5.99},
+      {"item_id": "series_001", "price": 2.99}
+    ],
+    "expected_total": 27.96
+  },
+  {
+    "user_id": "user_002",
+    "billing_period": "2026-01",
+    "subscription_plan": "basic",
+    "base_price": 9.99,
+    "purchases": [
+      {"item_id": "movie_003", "price": 4.99}
+    ],
+    "expected_total": 14.98
+  },
+  {
+    "user_id": "user_003",
+    "billing_period": "2026-01",
+    "subscription_plan": "premium",
+    "base_price": 19.99,
+    "purchases": [],
+    "expected_total": 19.99
+  },
+  {
+    "user_id": "user_004",
+    "billing_period": "2026-01",
+    "subscription_plan": "prime",
+    "base_price": 14.99,
+    "purchases": [
+      {"item_id": "movie_004", "price": 3.99},
+      {"item_id": "movie_005", "price": 3.99},
+      {"item_id": "movie_006", "price": 3.99},
+      {"item_id": "movie_007", "price": 3.99}
+    ],
+    "expected_total": 30.95
+  },
+  {
+    "user_id": "user_005",
+    "billing_period": "2026-01",
+    "subscription_plan": "basic",
+    "base_price": 9.99,
+    "purchases": [],
+    "expected_total": 9.99
+  },
+  {
+    "user_id": "user_006",
+    "billing_period": "2026-01",
+    "subscription_plan": "prime",
+    "base_price": 14.99,
+    "purchases": [
+      {"item_id": "movie_008", "price": 6.99},
+      {"item_id": "series_002", "price": 4.99}
+    ],
+    "expected_total": 26.97
+  },
+  {
+    "user_id": "user_007",
+    "billing_period": "2026-01",
+    "subscription_plan": "premium",
+    "base_price": 19.99,
+    "purchases": [
+      {"item_id": "movie_009", "price": 5.99}
+    ],
+    "expected_total": 25.98
+  },
+  {
+    "user_id": "user_008",
+    "billing_period": "2026-01",
+    "subscription_plan": "basic",
+    "base_price": 9.99,
+    "purchases": [
+      {"item_id": "movie_010", "price": 3.99},
+      {"item_id": "movie_011", "price": 3.99}
+    ],
+    "expected_total": 17.97
+  }
+]
+
