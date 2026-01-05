@@ -1,6 +1,6 @@
 # Job Queue & Task Processing System
 
-A production-ready backend job queue and task processing system built in Python. Features asynchronous job processing, retry logic, idempotent APIs, graceful shutdown, timeouts, and structured logging. Includes a real-world subscription billing workflow demonstration that models how large platforms handle monthly billing cycles internally.
+A production-ready backend job queue and task processing system built in Python. Features asynchronous job processing, retry logic, idempotent APIs, graceful shutdown, timeouts, and structured logging. Includes a real-world subscription billing workflow demonstration.
 
 ## Features
 
@@ -171,14 +171,12 @@ curl -X POST ... -d '{"task": "generate_monthly_bill", ..., "client_job_id": "bi
 
 ## Available Tasks
 
-- `sleep`: Sleep for N seconds (for testing async processing)
-- `sum`: Sum an array of numbers (simple computation task)
-- `fail`: Always fails (for testing retry logic)
-- `generate_monthly_bill`: Generate monthly subscription bill (real-world billing workflow)
+- `sleep`: Sleep for N seconds
+- `sum`: Sum an array of numbers
+- `fail`: Always fails (for testing)
+- `generate_monthly_bill`: Generate monthly subscription bill
 
 ## Testing
-
-### Unit Tests
 
 Run all tests:
 ```bash
@@ -191,32 +189,48 @@ Or run directly:
 python3 tests/test_queue.py
 ```
 
-Tests cover:
-- Successful job execution
-- Retry logic on failures
-- Permanent failure after max retries
-- Successful billing generation
-- Billing retry on invalid payload
-- Idempotent billing job submission
+## Load Testing
 
-### Billing Demo
+The system includes a load testing script to validate concurrency and throughput by submitting 200 to 1000 billing jobs concurrently and measuring completion time while varying the worker pool size.
 
-Run the complete billing workflow demonstration:
+### Running Load Tests
+
 ```bash
-# Terminal 1: Start server
+# Terminal 1: Start server (modify NUM_WORKERS in src/main.py to test different worker counts)
 cd jobqueue/src
 python main.py
 
-# Terminal 2: Run demo
+# Terminal 2: Run load test
 cd jobqueue/examples
-python billing_examples.py
+python load_test_billing.py
 ```
 
-The demo processes 8 sample users and demonstrates:
-- Asynchronous job processing
-- Multiple billing jobs in parallel
-- Total revenue calculation
-- Idempotency verification
+### Configuration
+
+Edit constants at the top of `load_test_billing.py`:
+- `N_JOBS`: Number of jobs to submit (default: 200, try 1000)
+- `SUBMISSION_CONCURRENCY`: Client threads submitting jobs (default: 10)
+- `JOB_TIMEOUT`: Per-job timeout in seconds (default: 5)
+- `MAX_RETRIES`: Retry attempts (default: 1)
+- `GLOBAL_DEADLINE`: Maximum test duration (default: 60s)
+
+### Validating Scaling
+
+To validate worker scaling, run the same test 3 times with different worker counts in `src/main.py`:
+- 1 worker
+- 2 workers
+- 4 workers
+
+Expected results:
+- Higher throughput with more workers
+- Lower average latency with more workers
+- Same correctness (no missing jobs, all reach terminal states)
+
+The load test reports:
+- Total jobs submitted
+- Success/failure counts
+- Average and P95 latency
+- Throughput (jobs per second)
 
 ## Architecture
 
@@ -246,13 +260,12 @@ jobqueue/
 │   ├── api.py            # REST API endpoints
 │   └── main.py           # Application bootstrap
 ├── tests/
-│   └── test_queue.py     # Unit tests (6 test cases)
+│   └── test_queue.py     # Unit tests
 ├── examples/
 │   ├── billing_examples.py    # Billing workflow demo script
 │   ├── billing_dataset.json   # Sample billing data (8 users)
-│   └── README.md              # Examples documentation
-├── requirements.txt      # Dependencies
-└── README.md            # This file
+│   └── load_test_billing.py   # Load testing script
+└── requirements.txt      # Dependencies
 ```
 
 ## License
