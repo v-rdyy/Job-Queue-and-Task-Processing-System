@@ -49,4 +49,3 @@ TASKS = {
     "fail": fail_task,
     "generate_monthly_bill": generate_monthly_bill
 }
-

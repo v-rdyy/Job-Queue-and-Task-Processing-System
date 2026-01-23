@@ -41,11 +41,9 @@ def create_job():
     else:
         logger.info(f"Job {job_id} already exists - returning existing job")
 
-    actual_status = job["status"] == "pending" if job else "pending"
+    actual_status = job["status"] if job else "pending"
     return jsonify({"job_id": job_id, "status": actual_status}), 201
 
-if __name__ == "__main__":
-    app.run(debug=True, port=5000)
 
 @app.route('/jobs/<job_id>', methods=['GET'])
 def get_job(job_id):
@@ -65,3 +63,7 @@ def get_job(job_id):
         "created_at": str(job["created_at"]),
         "updated_at": str(job["updated_at"])
     }), 200
+
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5001)

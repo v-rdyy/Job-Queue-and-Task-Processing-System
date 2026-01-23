@@ -8,7 +8,7 @@ class JobStore:
         self._lock = threading.Lock()
         self._client_job_ids = {}
 
-    def create_job(self, task_name, payload, max_retries=3, client_job_id=None, timeout=5):
+    def create_job(self, task_name, payload, max_retries=3, client_job_id=None, timeout=None):
 
         if client_job_id:
             with self._lock:
@@ -67,6 +67,3 @@ class JobStore:
             job["attempts"] += 1
             job["updated_at"] = datetime.now()
         return True
-
-        
-        

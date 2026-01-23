@@ -1,5 +1,4 @@
 import threading
-import tasks
 import logging
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FutureTimeoutError
 
@@ -55,10 +54,10 @@ class Worker(threading.Thread):
                 if job["attempts"] < job["max_retries"]:
                     self.job_store.update_job_status(job_id, "pending")
                     self.job_queue.enqueue(job_id)
-                    logger.warning(f"Job {job_id} will be retried (attempt {job['attempts']}/{job['max_retries']}) - error: {error_message}")
+                    logger.warning(f"Job {job_id} will be retried (attempt {job['attempts']}/{job['max_retries']})")
                 else:
                     self.job_store.update_job_status(job_id, "failed", error=error_message)
-                    logger.error(f"Job {job_id} permanently failed after {job['attempts']} attempts - error: {error_message}")
+                    logger.error(f"Job {job_id} permanently failed after {job['attempts']} attempts")
 
     def stop(self):
         self.running = False
